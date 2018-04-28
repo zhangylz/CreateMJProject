@@ -39,7 +39,7 @@ function cardFormatter(value, row, index) {//赋予的参数
                 '<img src="{path}" height=55 width=50 alt="" style="float:left;vertical-align:middle;" /img>'.format({path:pngPath}),
             '</div>',
             '<div  style="float:left;width:20%;vertical-align:middle;">',
-                '<input class="form-control" maxlength="1" name="cardCnt" id="cardCnt" placeholder="4" style="float:left;width: 10px;vertical-align:middle;" /input>',
+                '<input class="form-control" maxlength="1" name="cardCnt" id="cardCnt" placeholder="4" value=4 style="float:left;width: 10px;vertical-align:middle;" /input>',
             '</div>',
         '</div>',
     ].join('');
