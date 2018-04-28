@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Sticky Footer Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/sticky-footer.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/css/bootstrap.table-editor.css">
+    <script src="../static/js/bootstrap.table-editor.js"></script>
+    <link rel="stylesheet" href="../static/css/bootstrap-table.css">
+    <script src="../static/js/bootstrap-table.js"></script>
+    <script type="text/javascript" src="../static/js/stringformat.js"></script>
+    <script type="text/javascript" src="../static/js/createcardtable.js"></script>
+    <style>
+        .table-editable td {
+            position: relative;
+            height: 46px;
+        }
+        .table-editable td.editing {
+            min-width: 96px;
+        }
+    </style>
+    <script>
+    $(document).ready(function () { 
+    });
+    </script>
+  </head>
+
+  <body>
+
+    <!-- Begin page content -->
+    <div class="container">
+      <div class="page-header">
+        <h1>Create MJ Template</h1>
+      </div>
+        <form id="form1" method="post">
+            游戏名<input type="text" name="game_name" size="10">
+            游戏英文名<input type="text" name="game_enname" size="10">
+            节点id<input type="text" name="nodeid" size="5">
+            <br><br>
+            <p class="lead"><strong>基本功能</strong></p>
+            胡<input type="checkbox" name="basefunc_hu" value="true" checked disabled><input name="basefunc_hu" type="hidden" value="true"/>
+            胡七对<input type="checkbox" name="basefunc_hu7dui" value="true">
+            胡13幺<input type="checkbox" name="basefunc_hu13yao" value="true">
+            <br>
+            碰<input type="checkbox" name="basefunc_peng" value="true" checked disabled><input name="basefunc_peng" type="hidden" value="true"/>
+            杠<input type="checkbox" name="basefunc_gang" value="true" checked disabled><input name="basefunc_gang" type="hidden" value="true"/>
+            吃<input type="checkbox" name="basefunc_chi" value="true">
+            听<input type="checkbox" name="basefunc_ting" value="true">
+            <br>
+            四人<input type="radio" name="basefunc_player" value="four" checked>
+            三人<input type="radio" name="basefunc_player" value="three">
+            两人<input type="radio" name="basefunc_player" value="two">
+            <br><br>
+            <p class="lead"><strong>特殊功能</strong></p>
+            漏胡<input type="checkbox" name="extrafunc_louhu" value="true" checked disabled><input name="extrafunc_louhu" type="hidden" value="true"/>
+            漏碰<input type="checkbox" name="extrafunc_loupeng" value="true" checked disabled><input name="extrafunc_loupeng" type="hidden" value="true"/>
+            抢杠<input type="checkbox" name="extrafunc_qianggang" value="true" checked disabled><input name="extrafunc_qianggang" type="hidden" value="true"/>
+            <br><br>
+            <p class="lead"><strong>牌墙配置</strong>(打钩代表本张牌是花牌)</p>
+			<table id="tableCard" class="table table-bordered"></table>
+            <p class="lead"><strong>牌型列表</strong></p>
+              <div class="panel panel-default">
+              <!-- Table -->
+              <table class="table">
+                  <tbody id="paixing_list">
+                    <tr>
+                        <th>牌型名</th>
+                        <th>数值</th>
+                        <th>描述</th>
+                        <th>变量名</th>
+                        <th>#</th>
+                    </tr>
+                  </tbody>
+              </table>
+              </div>
+                <br>
+                名称<input type="text" id="input_paixing_name" size="10">
+                数值<input type="text" id="input_paixing_value" size="10">
+                描述<input type="text" id="input_paixing_miaoshu" size="10">
+                变量<input type="text" id="input_paixing_var" size="10">
+                <br><br>
+                <input type="button" class="btn btn-default" value="新增" onclick="add_paixing()">
+            <br><br>
+            <p class="lead"><strong>自定义规则(附加游戏规则)</strong></p>
+              <div class="panel panel-default">
+              <!-- Table -->
+              <table class="table">
+                  <tbody id="rule_list">
+                    <tr>
+                        <th>规则名</th>
+                        <th>变量名</th>
+                        <th>描述注释</th>
+                        <th>#</th>
+                    </tr>
+                  </tbody>
+              </table>
+              </div>
+                <br>
+                规则字段<input type="text" id="input_rule_name" size="10">
+                变量名<input type="text" id="input_rule_value" size="10">
+                描述注释<input type="text" id="input_rule_miaoshu" size="10">
+                <br><br>
+                <input type="button" class="btn btn-default" value="新增" onclick="add_rule()">
+            <br><br>
+            <p class="lead"><strong>胡型算法(通用算法与具体游戏规则不同的,自行修改)</strong></p>
+            清一色<input type="checkbox" name="algo_qingyise" value=1>
+            对对胡<input type="checkbox" name="algo_duiduihu" value=2>
+            缺门<input type="checkbox" name="algo_quemen" value=3>
+            杠开<input type="checkbox" name="algo_gangkai" value=4>
+            花杠开<input type="checkbox" name="algo_huagangkai" value=5>
+            混一色<input type="checkbox" name="algo_hunyise" value=6>
+            七对<input type="checkbox" name="algo_qidui" value=7>
+            十三幺<input type="checkbox" name="algo_shisanyao" value=8>
+            大吊车<input type="checkbox" name="algo_dadiaoche" value=9>
+            边张<input type="checkbox" name="algo_bianzhang" value=10>
+            卡张<input type="checkbox" name="algo_kazhang" value=11>
+            吊将<input type="checkbox" name="algo_diaojiang" value=12>
+            抢杠<input type="checkbox" name="algo_qianggang" value=13>
+            绝张<input type="checkbox" name="algo_juezhang" value=14>
+            字一色<input type="checkbox" name="algo_ziyise" value=15>
+            海底<input type="checkbox" name="algo_haidi" value=16>
+            全顺子<input type="checkbox" name="algo_quanshunzi" value=17>
+            <br><br>
+            <div>
+                一炮多响<input type="radio" name="extra_algo" value="yipaoduoxiang" checked onclick="del_extra_jiehu()">
+                截胡<input type="radio" id="extra_algo_jiehu" name="extra_algo" value="jiehu" onclick="extra_jiehu()">
+            </div>
+
+            <br><br>
+            <button class="btn btn-primary" type="button" onclick="combine_table()">生成json文件</button>
+        </form>
+    </div>
+    <br>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">author:may@uc888.cn</p>
+        <p class="text-muted">modifier:549545303@qq.com</p>
+      </div>
+    </footer>
+
+    <script>
+        function add_paixing(){
+            var paixing_name = $("#input_paixing_name").val();
+            var paixing_value = $("#input_paixing_value").val();
+            var paixing_miaoshu = $("#input_paixing_miaoshu").val();
+            var paixing_var = $("#input_paixing_var").val();
+            $("#paixing_list").append('<tr><td class="td_paixing_name">' + paixing_name + '</td><td class="td_paixing_value">' + paixing_value + '</td><td class="td_paixing_miaoshu">' + paixing_miaoshu + '</td><td class="td_paixing_var">' + paixing_var + '</td><td><input type="button" id="delete_paixing" value="删除" onclick="javascript:$(this).parent().parent().remove();"></td></tr>');
+            $("#input_paixing_name").val("");
+            $("#input_paixing_value").val("");
+            $("#input_paixing_miaoshu").val("");
+            $("#input_paixing_var").val("");
+        }
+
+        function add_rule(){
+            var rule_name = $("#input_rule_name").val();
+            var rule_value = $("#input_rule_value").val();
+            var rule_miaoshu = $("#input_rule_miaoshu").val();
+            $("#rule_list").append('<tr><td class="td_rule_name">' + rule_name + '</td><td class="td_rule_value">' + rule_value + '</td><td class="td_rule_miaoshu">' + rule_miaoshu + '</td><td><input type="button" id="delete_rule" value="删除" onclick="javascript:$(this).parent().parent().remove();"></td></tr>');
+            $("#input_rule_name").val("");
+            $("#input_rule_value").val("");
+            $("#input_rule_miaoshu").val("");
+        }
+
+        function extra_jiehu(){
+            var s = $("#extra_algo_jiehu").parent().find("[name='extra_algo_jiehu']");
+            if (s.length == 0){
+                $("#extra_algo_jiehu").parent().append('<br>');
+                $("#extra_algo_jiehu").parent().append('<nobr>一个人点胡,不用等其他人</nobr><input type="radio" name="extra_algo_jiehu" value="budeng" checked>');
+                $("#extra_algo_jiehu").parent().append('<nobr>所有玩家都要点胡或放弃</nobr><input type="radio" name="extra_algo_jiehu" value="deng">');
+            } else {
+                return;
+            }
+        }
+
+        function del_extra_jiehu(){
+            $(extra_algo_jiehu).parent().find("[name='extra_algo_jiehu']").remove();
+            $(extra_algo_jiehu).parent().find("nobr").remove();
+            $(extra_algo_jiehu).parent().find("br").remove();
+        }
+
+        function combine_table(){
+            var paixing_list = $("#paixing_list tr");
+            var rule_list = $("#rule_list tr");
+            var $form = $("#form1");
+            var form_str = $form.serialize();
+            
+            if(paixing_list.length > 1){
+                $(".td_paixing_name").each(function(i, item){
+                    var tmp_str = "&paixing_name_" + i + "=" + $(item).text();
+                    form_str = form_str + tmp_str;
+                })
+                $(".td_paixing_value").each(function(i, item){
+                    var tmp_str = "&paixing_value_" + i + "=" + $(item).text();
+                    form_str = form_str + tmp_str;
+                })
+                $(".td_paixing_miaoshu").each(function(i, item){
+                    var tmp_str = "&paixing_miaoshu_" + i + "=" + $(item).text();
+                    form_str = form_str + tmp_str;
+                })
+                $(".td_paixing_var").each(function(i, item){
+                    var tmp_str = "&paixing_var_" + i + "=" + $(item).text();
+                    form_str = form_str + tmp_str;
+                })
+            }
+
+            if(rule_list.length > 1){
+                $(".td_rule_name").each(function(i, item){
+                    var tmp_str = "&rule_name_" + i + "=" + $(item).text();
+                    form_str = form_str + tmp_str;
+                })
+                $(".td_rule_value").each(function(i, item){
+                    var tmp_str = "&rule_value_" + i + "=" + $(item).text();
+                    form_str = form_str + tmp_str;
+                })
+                $(".td_rule_miaoshu").each(function(i, item){
+                    var tmp_str = "&rule_miaoshu_" + i + "=" + $(item).text();
+                    form_str = form_str + tmp_str;
+                })
+            }
+
+            $.post("/", form_str, function(url, data){
+                if (data){
+                    data = typeof data == 'string' ? data : jQuery.param(data);
+                    var inputs = '';
+                    jQuery.each(data.split('&'), function(){
+                        var pair = this.split('=');
+                        inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+                    });
+                    jQuery('<form action="'+ url +'" method="'+ 'post' +'">'+inputs+'</form>')
+                        .appendTo('body').submit().remove();
+                };
+            });
+        }
+    </script>
+    <script>
+        var $table = $('#tableCard');
+        $(function () {
+            initCardMap();
+            initTable($table);
+        });
+    </script>
+</body>
+</html>
