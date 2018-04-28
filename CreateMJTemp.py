@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
-from flask import Flask, render_template, request, redirect, url_for, make_response, jsonify, session
+from flask import Flask, render_template, request, url_for, make_response, session
+import json
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 app.secret_key = 'A0Zr98j/3yX:R!XHH!jmN]LWX/,?RT'
@@ -9,30 +10,36 @@ PAI_QIANG = ['wan_1', 'wan_2', 'wan_3', 'wan_4', 'wan_5', 'wan_6', 'wan_7', 'wan
              'tong_1', 'tong_2', 'tong_3', 'tong_4', 'tong_5', 'tong_6', 'tong_7', 'tong_8', 'tong_9',
              'dong_feng', 'nan_feng', 'xi_feng', 'bei_feng', 'hong_zhong', 'fa_cai', 'bai_ban',
              'chun', 'xia', 'qiu', 'dong', 'mei', 'lan', 'zhu', 'ju']
+cardMap = ['cardCnt1','cardCnt2','cardCnt3','cardCnt4','cardCnt5','cardCnt6','cardCnt7','cardCnt8','cardCnt9',
+                'cardCnt11','cardCnt12','cardCnt13','cardCnt14','cardCnt15','cardCnt16','cardCnt17','cardCnt18','cardCnt19',
+                'cardCnt21','cardCnt22','cardCnt23','cardCnt24','cardCnt25','cardCnt26','cardCnt27','cardCnt28','cardCnt29',
+                'cardCnt31','cardCnt32','cardCnt33','cardCnt34','cardCnt35','cardCnt36','cardCnt37',
+                'cardCnt41','cardCnt42','cardCnt43','cardCnt44','cardCnt45','cardCnt46','cardCnt47','cardCnt48',
+                'cardCnt51','cardCnt52','cardCnt53','cardCnt54'
+              ]
 
 HU_MATH = ['algo_qingyise', 'algo_duiduihu', 'algo_quemen', 'algo_gangkai', 'algo_huagangkai', 'algo_hunyise',
            'algo_qidui', 'algo_shisanyao', 'algo_dadiaoche', 'algo_bianzhang', 'algo_kazhang', 'algo_diaojiang',
-           'algo_qianggang', 'algo_juezhang', 'algo_ziyise']
+           'algo_qianggang', 'algo_juezhang', 'algo_ziyise', 'algo_haidi', 'algo_quanshunzi']
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
         return render_template('CreateMJTemp.html')
-
-@app.route('/get_json', methods=['GET', 'POST'])
-def get_json():
-    if request.method == 'POST':
+    elif request.method == 'POST':
         keys = []
         values = []
         for i in request.form:
             keys.append(i)
             values.append(request.form[i])
         dict_data = dict(zip(keys, values))
-        session['messages'] = make_json_data(dict_data)
-        return redirect(url_for('get_json'))
-    elif request.method == 'GET':
-        content = jsonify(session['messages'])
-        response = make_response(content)
+        session['messages'] = json.dumps(make_json_data(dict_data), ensure_ascii=False)
+        return url_for('download_json')
+
+@app.route('/download_json', methods=['GET', 'POST'])
+def download_json():
+    if request.method == 'POST':
+        response = make_response(session['messages'])
         response.headers['Content-Disposition'] = 'attachment; filename=config.json'
         return response
 
@@ -43,13 +50,14 @@ def make_json_data(data):
         keys = data.keys()
         # 牌墙
         pai_qiang = []
-        for pai in PAI_QIANG:
-            pai_qiang.append(int(data[pai]))
+        for pai in cardMap:
+            if data[pai]:
+                pai_qiang.append(int(data[pai]))
         ret['wall'] = pai_qiang
 
         # 花牌
         hua_pai = []
-        for hua in list(filter(lambda x:'_hua' in x, keys)):
+        for hua in list(filter(lambda x:'selected' in x, keys)):
             if data[hua]:
                 hua_pai.append(int(data[hua]))
         if len(hua_pai) > 0:
@@ -65,6 +73,14 @@ def make_json_data(data):
         else:
             ret['nodeId'] = 0
 
+        # 玩家人数
+        if data['basefunc_player'] == 'four':
+            ret['maxPlayer'] = 4
+        elif data['basefunc_player'] == 'three':
+            ret['maxPlayer'] = 3
+        elif data['basefunc_player'] == 'two':
+            ret['maxPlayer'] = 2
+
         # 胡型算法
         if data['extra_algo'] == 'yipaoduoxiang':
             ret['isHuMore'] = True
@@ -79,6 +95,11 @@ def make_json_data(data):
             ret['canChi'] = True
         else:
             ret['canChi'] = False
+
+        if 'basefunc_ting' in data:
+            ret['canTing'] = True
+        else:
+            ret['canTing'] = False
 
         if 'basefunc_hu7dui' in data:
             ret['canHuQiDui'] = True

@@ -22,24 +22,26 @@ function initCardMap() {
 function cardFormatter(value, row, index) {//赋予的参数
     var  pngPath = '';
     var status = '';
+    var index  = '';
     if (value != undefined && value != '') {
         pngPath = '../static/images/card/' + value.index+ '.png';
         if (value.checked != undefined && value.checked == true) {
             status = 'checked';
-        } 
+        }
+        index = value.index;
     } else {
         return ['<div> </div>'].join('');
     }
     return [
         '<div>',
             '<div  style="float:left;width:25%;vertical-align:middle;">',
-                '<input type="checkbox" id = "selected" name="selected" style="float:left;vertical-align:middle;" {checked} /input>'.format({checked:status}),
+                '<input type="checkbox" id = "selected{index}" name="selected{index}" value={index} style="float:left;vertical-align:middle;" {checked} /input>'.format({index:index,checked:status}),
             '</div>',
             '<div  style="float:left;width:45%;vertical-align:middle;">',
                 '<img src="{path}" height=55 width=50 alt="" style="float:left;vertical-align:middle;" /img>'.format({path:pngPath}),
             '</div>',
             '<div  style="float:left;width:20%;vertical-align:middle;">',
-                '<input class="form-control" maxlength="1" name="cardCnt" id="cardCnt" placeholder="4" value=4 style="float:left;width: 10px;vertical-align:middle;" /input>',
+                '<input class="form-control" maxlength="1" name="cardCnt{index}" id="cardCnt{index}" placeholder="4" value=4 style="float:left;width: 10px;vertical-align:middle;" /input>'.format({index:index}),
             '</div>',
         '</div>',
     ].join('');

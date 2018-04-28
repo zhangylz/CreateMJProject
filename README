@@ -1,0 +1,1 @@
+gunicorn -b 192.168.20.102:9000 -w 4 -D -p /var/run/gunicorn.pid --log-level debug --error-logfile /var/log/gunicorn_error.log --log-file /var/log/gunicorn.log CreateMJTemp:app

@@ -230,6 +230,7 @@
                     form_str = form_str + tmp_str;
                 })
             }
+
             $.post("/", form_str, function(url, data){
                 if (data){
                     data = typeof data == 'string' ? data : jQuery.param(data);
