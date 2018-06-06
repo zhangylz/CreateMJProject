@@ -68,10 +68,10 @@ def make_json_data(data):
         # 名称
         ret['gameName'] = data['game_name']
         ret['gameEName'] = data['game_enname']
-        if len(data['nodeid']) > 0:
-            ret['nodeId'] = int(data['nodeid'])
-        else:
-            ret['nodeId'] = 0
+        # if len(data['nodeid']) > 0:
+        #     ret['nodeId'] = int(data['nodeid'])
+        # else:
+        #     ret['nodeId'] = 0
 
         # 玩家人数
         if data['basefunc_player'] == 'four':
@@ -137,9 +137,13 @@ def make_json_data(data):
             ret['cardType'] = card_type
         else:
             ret['cardType'] = None
-
         # 自定义规则
-
+        ret['lnode'] = int(data['nodeid_0'])
+        ret['tnode'] = int(data['nodeid_1'])
+        ret['lgateport'] = int(data['gateport_0'])
+        ret['tgateport'] = int(data['gateport_1'])        
+        ret['lclusterport'] = int(data['clusterport_0'])
+        ret['tclusterport'] = int(data['clusterport_1'])      
         return ret
 
 if __name__ == '__main__':

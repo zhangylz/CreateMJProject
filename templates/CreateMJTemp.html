@@ -22,6 +22,7 @@
     <script src="../static/js/bootstrap-table.js"></script>
     <script type="text/javascript" src="../static/js/stringformat.js"></script>
     <script type="text/javascript" src="../static/js/createcardtable.js"></script>
+    <script type="text/javascript" src="../static/js/createtesterconfigtable.js"></script>
     <style>
         .table-editable td {
             position: relative;
@@ -45,10 +46,12 @@
         <h1>Create MJ Template</h1>
       </div>
         <form id="form1" method="post">
-            游戏名<input type="text" name="game_name" size="10">
-            游戏英文名<input type="text" name="game_enname" size="10">
-            节点id<input type="text" name="nodeid" size="5">
+            游戏名<input type="text" name="game_name" size="8">
+            游戏英文名<input type="text" name="game_enname" size="8">
             <br><br>
+			<p class="lead"><strong>测试服端口配置</strong>(请找开发运维工程师申请端口)</p>
+			<table id="tableTesterConfig" class="table table-bordered"></table>
+			<br><br>
             <p class="lead"><strong>基本功能</strong></p>
             胡<input type="checkbox" name="basefunc_hu" value="true" checked disabled><input name="basefunc_hu" type="hidden" value="true"/>
             胡七对<input type="checkbox" name="basefunc_hu7dui" value="true">
@@ -252,5 +255,11 @@
             initTable($table);
         });
     </script>
+	<script>
+	    var $tableTesterConfig = $('#tableTesterConfig');
+		$(function () {
+            initConfigTable($tableTesterConfig);
+        });
+	</script>
 </body>
 </html>
